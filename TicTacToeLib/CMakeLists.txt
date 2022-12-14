@@ -1,4 +1,4 @@
-add_library(TicTacToeLib "Board.h" "Board.cpp" "GameLogic.h" "GameLogic.cpp" )
+add_library(TicTacToeLib "Board.h" "Board.cpp" "GameLogic.h" "GameLogic.cpp" "Game.h" "Game.cpp" )
 target_include_directories(TicTacToeLib PUBLIC .)
 
 include(FetchContent)

@@ -1,5 +1,6 @@
 #include <Board.h>
 #include <GameLogic.h>
+#include <Game.h>
 #include <gtest/gtest.h>
 
 TEST(BoardTests, RequireThat_Constructor_CreatesEmptyBoard) {
@@ -168,4 +169,80 @@ TEST(GameLogicTests, RequireThat_GetBestMove_ChoosesWinningMove_WhenNextMoveCanW
     auto bestMoveX = *GetBestMove(board, Player::X);
     EXPECT_TRUE(bestMoveX == 2u || bestMoveX == 5u); // Not intuitive to block, but X will anyway win in next move
     EXPECT_EQ(*GetBestMove(board, Player::O), 2u);
+}
+
+TEST(GameTests, RequireThat_ValidMove_ReturnsTrueOnAnyCell_WhenGameStarted) {
+    Game game{Player::X};
+    for(size_t row = 0; row < Board::Columns(); ++row) {
+        for(size_t col = 0; col < Board::Columns(); ++col) {
+            EXPECT_TRUE(game.ValidMove(col, row));
+        }
+    }
+}
+
+TEST(GameTests, RequireThat_ValidMove_ReturnsFalse_WhenCellIsNotEmpty) {
+    Game game{Player::X};
+    game.MakeMove(1u, 2u);
+    EXPECT_FALSE(game.ValidMove(1u, 2u));
+}
+
+TEST(GameTests, RequireThat_MakeMove_TogglesPlayer) {
+    Game game{Player::O};
+
+    ASSERT_EQ(game.CurrentPlayer(), Player::O);
+    game.MakeMove(2u, 2u);
+    EXPECT_EQ(game.CurrentPlayer(), Player::X);
+}
+
+TEST(GameTests, RequireThat_MakeCpuMove_TogglesPlayer) {
+    Game game{Player::O};
+
+    ASSERT_EQ(game.CurrentPlayer(), Player::O);
+    game.MakeCpuMove(3u);
+    EXPECT_EQ(game.CurrentPlayer(), Player::X);
+}
+
+TEST(GameTests, RequireThat_GetPlayer_ReturnsEmpty_WhenCellIsEmpty) {
+    Game game{Player::O};
+
+    EXPECT_FALSE(game.GetPlayer(1u, 2u).has_value());
+}
+
+TEST(GameTests, RequireThat_GetPlayer_ReturnsX_WhenWhenCellTakenByX) {
+    Game game{Player::X};
+
+    game.MakeMove(2u, 1u);
+    EXPECT_EQ(game.GetPlayer(2u, 1u), Player::X);
+}
+
+TEST(GameTests, RequireThat_MakeCpuMove_PopulatesACell) {
+    Game game{Player::X};
+    game.MakeCpuMove(3u);
+
+    size_t availableMoves = 0u;
+    for(size_t row = 0; row < Board::Columns(); ++row) {
+        for(size_t col = 0; col < Board::Columns(); ++col) {
+            if (game.GetPlayer(col, row).has_value())
+                ++availableMoves;
+        }
+    }
+    EXPECT_EQ(availableMoves, 1u);
+}
+
+TEST(GameTests, RequireThat_GetGameStatus_ReturnsInProgress_WhenBoardIsEmpty) {
+    Game game{Player::X};
+
+    EXPECT_EQ(game.GetGameStatus(Player::X), GameStatus::InProgress);
+    EXPECT_EQ(game.GetGameStatus(Player::O), GameStatus::InProgress);
+}
+
+TEST(GameTests, RequireThat_GetGameStatus_ReturnsWin_WhenPlayerWon) {
+    Game game{Player::X};
+    game.MakeMove(0u, 0u); // X
+    game.MakeMove(0u, 1u); // O
+    game.MakeMove(1u, 0u); // X
+    game.MakeMove(1u, 1u); // O
+    game.MakeMove(2u, 0u); // X
+
+    EXPECT_EQ(game.GetGameStatus(Player::X), GameStatus::Win);
 }

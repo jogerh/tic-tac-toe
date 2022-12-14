@@ -121,6 +121,16 @@ void GameModel::setDifficulty(Difficulty difficulty)
     m_maxDepth = maxDepth;
 }
 
+GameModel::Difficulty GameModel::getDifficulty() const
+{
+    if (m_maxDepth == 1u)
+        return Difficulty::Easy;
+    else if (m_maxDepth == 2u)
+        return Difficulty::Medium;
+    else
+        return Difficulty::Impossible;
+}
+
 void GameModel::revert()
 {
     GameStatus status = m_game->GetGameStatus(Player::X);

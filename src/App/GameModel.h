@@ -31,7 +31,7 @@ class GameModel : public QAbstractTableModel
     QML_ELEMENT
     Q_PROPERTY(Status gameStatus READ getGameStatus NOTIFY gameStatusChanged)
     Q_PROPERTY(GameStatistics gameStats READ getGameStats NOTIFY gameStatusChanged)
-    Q_PROPERTY(Difficulty difficulty WRITE setDifficulty)
+    Q_PROPERTY(Difficulty difficulty READ getDifficulty WRITE setDifficulty)
 public:
     enum class Status {
         HumanPlays,
@@ -76,6 +76,9 @@ public:
 
     /** Changes the CPU player's ability to predict future moves */
     void setDifficulty(Difficulty difficulty);
+
+    Difficulty getDifficulty() const;
+
 signals:
     /** Notified whenever the game status may ahve changed,
         for example if a player has made a move */

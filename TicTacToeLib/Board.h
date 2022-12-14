@@ -48,3 +48,6 @@ private:
     static inline constexpr size_t m_columns = 3;
     std::array<std::optional<Player>, m_columns * m_columns> m_grid;
 };
+
+/** Switch turn to the other player */
+Player Toggle(Player player);

@@ -1,4 +1,5 @@
 #include <Board.h>
+#include <GameLogic.h>
 #include <gtest/gtest.h>
 
 TEST(BoardTests, RequireThat_Constructor_CreatesEmptyBoard) {
@@ -74,3 +75,97 @@ TEST(BoardTests, RequireThat_GetGameStatus_ReturnsTie_WhenBoardIsFullWithoutWinn
     EXPECT_EQ(board.GetGameStatus(Player::X), GameStatus::Tie);
 }
 
+TEST(GameLogicTests, RequireThat_GetBestMove_ReturnsEmpty_WhenBoardIsFull) {
+    // O X O
+    // O X O
+    // X O X
+    Board board;
+    for(const auto& pos : {0u, 2u, 3u, 5u, 7u})
+        board.SetCell(pos, Player::O);
+
+    for(const auto& pos : {1u, 4u, 6u, 8u})
+        board.SetCell(pos, Player::X);
+
+    EXPECT_FALSE(GetBestMove(board, Player::X).has_value());
+}
+
+
+TEST(GameLogicTests, RequireThat_GetBestMove_ReturnsLastEmptyCell_WhenOnlyOneCellRemaining) {
+    // O X O
+    // O X O
+    // X O _
+    Board board;
+    for(const auto& pos : {0u, 2u, 3u, 5u, 7u})
+        board.SetCell(pos, Player::O);
+
+    for(const auto& pos : {1u, 4u, 6u})
+        board.SetCell(pos, Player::X);
+
+    EXPECT_EQ(GetBestMove(board, Player::X), 8u);
+}
+
+TEST(GameLogicTests, RequireThat_GetBestMove_ReturnsWinningMove_WhenTwoCellsRemaining) {
+    // X O O
+    // O X O
+    // X _ _
+    Board board;
+    for(const auto& pos : {1u, 2u, 3u, 5u})
+        board.SetCell(pos, Player::O);
+
+    for(const auto& pos : {0u, 4u, 6u})
+        board.SetCell(pos, Player::X);
+
+    EXPECT_EQ(*GetBestMove(board, Player::X), 8u);
+    EXPECT_EQ(*GetBestMove(board, Player::O), 8u);
+}
+
+TEST(GameLogicTests, RequireThat_GetBestMove_Blocks_WhenOponentCanWin_AndDepthIs2) {
+    // O O _
+    // X _ _
+    // X _ _
+    Board board;
+    for(const auto& pos : {0u, 1u})
+        board.SetCell(pos, Player::O);
+
+    for(const auto& pos : {3u, 6u})
+        board.SetCell(pos, Player::X);
+
+    // Need to reduce search depth because X will eventually loose
+    // No move is better than the other for the end game. With a
+    // lower depth, the eventual loss is not visible, and blocking
+    // is the best option.
+    EXPECT_EQ(*GetBestMove(board, Player::X, 2u), 2u);
+}
+
+TEST(GameLogicTests, RequireThat_GetBestMove_TakesWin_WhenDepthIs1) {
+    // O O _
+    // X _ _
+    // X _ _
+    Board board;
+    for(const auto& pos : {0u, 1u})
+        board.SetCell(pos, Player::O);
+
+    for(const auto& pos : {3u, 6u})
+        board.SetCell(pos, Player::X);
+
+    // In easy mode, we want the algorithm to take any wins
+    // that may show up, even if it is unable to have any
+    // strategy
+    EXPECT_EQ(*GetBestMove(board, Player::O, 1u), 2u);
+}
+
+TEST(GameLogicTests, RequireThat_GetBestMove_ChoosesWinningMove_WhenNextMoveCanWin) {
+    // O O _
+    // X X _
+    // _ _ _
+    Board board;
+    for(const auto& pos : {0u, 1u})
+        board.SetCell(pos, Player::O);
+
+    for(const auto& pos : {3u, 4u})
+        board.SetCell(pos, Player::X);
+
+    auto bestMoveX = *GetBestMove(board, Player::X);
+    EXPECT_TRUE(bestMoveX == 2u || bestMoveX == 5u); // Not intuitive to block, but X will anyway win in next move
+    EXPECT_EQ(*GetBestMove(board, Player::O), 2u);
+}

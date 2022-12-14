@@ -69,3 +69,8 @@ bool Board::HasEmptyCells() const
         return !tileValue.has_value();
     });
 }
+
+Player Toggle(Player player)
+{
+    return player == Player::X ? Player::O : Player::X;
+}

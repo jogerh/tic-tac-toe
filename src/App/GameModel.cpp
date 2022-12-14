@@ -70,7 +70,7 @@ bool GameModel::setData(const QModelIndex &cellIndex, const QVariant&, int role)
 
     m_game->MakeMove(col, row);
 
-    emit dataChanged(index(0, 0), index(2, 2), {role});
+    emit dataChanged(cellIndex, cellIndex, {role});
     emit gameStatusChanged();
     return true;
 }
@@ -80,11 +80,13 @@ void GameModel::playCpu()
     if (m_game->CurrentPlayer() != Player::O)
         return;
 
-    if (m_game->GetGameStatus(Player::X) != GameStatus::InProgress)
+    if (m_game->GetGameStatus(Player::O) != GameStatus::InProgress)
         return;
 
     m_game->MakeCpuMove(m_maxDepth);
 
+    // We don't know where the computer made its move,
+    // so we need to refresh every cell.
     emit dataChanged(index(0, 0), index(2, 2), {CellRole});
     emit gameStatusChanged();
 }
@@ -101,7 +103,6 @@ GameModel::Status GameModel::getGameStatus() {
     default:
         return m_game->CurrentPlayer() == Player::O ? Status::CpuPlays : Status::HumanPlays;
     }
-
 }
 
 GameStatistics GameModel::getGameStats()
@@ -132,7 +133,9 @@ void GameModel::revert()
 
     // Human gets to start only if previous game was lost.
     const auto starts = status == GameStatus::Loose ? Player::X : Player::O;
+
     m_game = std::make_unique<Game>(starts);
+
     emit dataChanged(index(0, 0), index(2, 2), {CellRole});
     emit gameStatusChanged();
 }

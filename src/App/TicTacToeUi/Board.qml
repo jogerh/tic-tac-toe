@@ -30,7 +30,7 @@ TableView {
 
         Text {
             anchors.fill: parent
-            text: parent.model.value
+            text: model.value
             font.family: "Comic Sans MS"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter

@@ -44,8 +44,6 @@ Item {
         }
         Rectangle{
             Layout.fillWidth: true
-            color: "green"
-            Layout.preferredWidth: 2
 
             LevelComboBox{
                 anchors.centerIn: parent

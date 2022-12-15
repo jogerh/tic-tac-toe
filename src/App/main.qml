@@ -71,37 +71,13 @@ Window {
                     color: "green"
                     Layout.preferredWidth: 2
 
-                    ComboBox {
-
-                        id: control
+                    LevelComboBox{
                         anchors.centerIn: parent
-                        currentIndex: 2
-                        textRole: "text"
-                        valueRole: "level"
                         font.pixelSize: 30; font.family: "Comic Sans MS"
+                        currentIndex: 2
 
-                        background: Rectangle {
-                            color: root.color
-                        }
-
-                        delegate: ItemDelegate {
-                            width: control.width
-                            contentItem: Text {
-                                text: model[control.textRole]
-                                color: "black"
-                                font: control.font
-                                elide: Text.ElideRight
-                                verticalAlignment: Text.AlignVCenter
-                            }
-                            highlighted: control.highlightedIndex === index
-                        }
-
-                        contentItem: Text {
-                            text: control.displayText
-                            font: control.font
-                            color: "white"
-                            elide: Text.ElideRight
-                        }
+                        backgroundColor: root.color
+                        textColor: "white"
 
                         model: ListModel {
                             id: difficultyItems

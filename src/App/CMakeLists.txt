@@ -9,7 +9,7 @@ qt_add_executable(TicTacToeApp
 qt_add_qml_module(TicTacToeApp
     URI tictactoe
     VERSION 1.0
-    QML_FILES TicTacToeUi/LevelComboBox.qml main.qml TicTacToeUi/Board.qml
+    QML_FILES TicTacToeUi/LevelComboBox.qml main.qml TicTacToeUi/Board.qml TicTacToeUi/GameControls.qml
     SOURCES GameModel.h GameModel.cpp
 )
 

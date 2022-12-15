@@ -26,6 +26,8 @@ Window {
 
             Board {
                 id: board
+                textColor: root.color
+                backgroundColor: "white"
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 Layout.preferredHeight: 300

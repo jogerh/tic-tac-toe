@@ -8,6 +8,9 @@ import tictactoe
 TableView {
     id: board
 
+    property color textColor
+    property color backgroundColor
+
     rowSpacing: 10
     columnSpacing: 10
 
@@ -26,18 +29,18 @@ TableView {
 
         required property var model
 
-        color: "white"
+        color: backgroundColor
 
         Text {
             anchors.fill: parent
-            text: parent.model.value
+            text: model.value
             font.family: "Comic Sans MS"
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: 240
             minimumPointSize: 2
             fontSizeMode: Text.Fit
-            color: "#424242"
+            color: textColor
         }
 
         MouseArea {

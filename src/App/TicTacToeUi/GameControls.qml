@@ -6,7 +6,14 @@ import tictactoe
 Item {
     id: root
     required property var model
+    property color textColor
     property color backgroundColor
+    property font font
+
+    component GameText : Text {
+        font: root.font
+        color: root.textColor
+    }
 
     RowLayout {
         anchors.fill: parent
@@ -17,29 +24,23 @@ Item {
 
         Rectangle {
             Layout.fillWidth: true
-            Text {
+            GameText {
                 anchors.centerIn: parent
                 text: "Wins: " + root.model.gameStats.Wins
-                fontSizeMode: Text.Fit; font.pixelSize: 30; font.family: "Comic Sans MS"
-                color: "white"
             }
         }
         Rectangle {
             Layout.fillWidth: true
-            Text {
+            GameText {
                 anchors.centerIn: parent
                 text: "Ties: " + root.model.gameStats.Ties
-                fontSizeMode: Text.Fit; font.pixelSize: 30; font.family: "Comic Sans MS"
-                color: "white"
             }
         }
         Rectangle {
             Layout.fillWidth: true
-            Text {
+            GameText {
                 anchors.centerIn: parent
                 text: "Losses: " + root.model.gameStats.Losses
-                fontSizeMode: Text.Fit; font.pixelSize: 30; font.family: "Comic Sans MS"
-                color: "white"
             }
         }
         Rectangle{
@@ -47,11 +48,11 @@ Item {
 
             LevelComboBox{
                 anchors.centerIn: parent
-                font.pixelSize: 30; font.family: "Comic Sans MS"
+                font: root.font
                 currentIndex: 2
 
                 backgroundColor: root.backgroundColor
-                textColor: "white"
+                textColor: root.textColor
 
                 model: ListModel {
                     id: difficultyItems

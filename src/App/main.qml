@@ -37,7 +37,9 @@ Window {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 70
                 model: board.model
+                font.pixelSize: 30; font.family: "Comic Sans MS"
                 backgroundColor: root.color
+                textColor: "white"
             }
         }
 

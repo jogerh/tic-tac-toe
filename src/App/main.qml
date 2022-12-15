@@ -33,7 +33,12 @@ Window {
                 Layout.preferredHeight: 300
             }
 
-            GameControls {}
+            GameControls {
+                Layout.fillWidth: true
+                Layout.preferredHeight: 70
+                model: board.model
+                backgroundColor: root.color
+            }
         }
 
         Rectangle {

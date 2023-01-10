@@ -9,14 +9,14 @@ QHash<int, QByteArray> GameModel::roleNames() const {
 
 GameModel::GameModel(QObject* parent)
     : QAbstractTableModel{parent}
-    ,  m_game{std::make_unique<Game>(Player::X)}
+    , m_game{std::make_unique<Game>(Player::X)}
 {
 }
 
 int GameModel::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
-        return 0;
+        return 0; // When implementing a table based model, rowCount() should return 0 when the parent is valid.
 
     return 3;
 }
@@ -24,7 +24,7 @@ int GameModel::rowCount(const QModelIndex &parent) const
 int GameModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
-        return 0;
+        return 0; // When implementing a table based model, columnCount() should return 0 when the parent is valid.
 
     return 3;
 }

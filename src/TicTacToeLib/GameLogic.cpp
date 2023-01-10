@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <random>
 #include <array>
+#include <numeric>
 namespace {
 
 struct Move {
@@ -14,12 +15,13 @@ struct Move {
 /** Returns numbers 0-8 in random order */
 std::array<size_t, 9> RandomMoves() {
     std::array<size_t, 9> values;
-    for(size_t i = 0; i < values.size(); ++i)
-        values[i] = i;
+    iota(begin(values), end(values), 0u);
 
     std::random_device rd;
     std::mt19937 g(rd());
-    std::shuffle(begin(values), end(values), g);
+
+    shuffle(begin(values), end(values), g);
+
     return values;
 }
 
@@ -46,8 +48,8 @@ Move EvaluateNextMove(Board &board, Player player, size_t depth) {
     // the highest chance of winning
     Move bestMove{.Score = std::numeric_limits<int>::min()};
 
-    // Give some randomness if all moves are equal to make
-    // game more fun in easy levels
+    // Give some randomness if all moves are equally good
+    // to make game more fun in easy levels
     for(const auto pos : RandomMoves()) {
         if (board.GetCell(pos).has_value())
             continue;

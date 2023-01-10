@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <random>
 #include <array>
+#include <numeric>
 namespace {
 
 struct Move {
@@ -14,12 +15,13 @@ struct Move {
 /** Returns numbers 0-8 in random order */
 std::array<size_t, 9> RandomMoves() {
     std::array<size_t, 9> values;
-    for(size_t i = 0; i < values.size(); ++i)
-        values[i] = i;
+    iota(begin(values), end(values), 0u);
 
     std::random_device rd;
     std::mt19937 g(rd());
-    std::shuffle(begin(values), end(values), g);
+
+    shuffle(begin(values), end(values), g);
+
     return values;
 }
 

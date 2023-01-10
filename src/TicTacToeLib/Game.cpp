@@ -9,7 +9,7 @@ Game::Game(Player firstPlayer)
 
 bool Game::ValidMove(size_t col, size_t row)
 {
-    return !m_board.GetCell(col + m_board.Columns() * row).has_value();
+    return !GetPlayer(col, row).has_value();
 }
 
 void Game::MakeMove(size_t col, size_t row)

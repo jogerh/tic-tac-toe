@@ -48,8 +48,8 @@ Move EvaluateNextMove(Board &board, Player player, size_t depth) {
     // the highest chance of winning
     Move bestMove{.Score = std::numeric_limits<int>::min()};
 
-    // Give some randomness if all moves are equal to make
-    // game more fun in easy levels
+    // Give some randomness if all moves are equally good
+    // to make game more fun in easy levels
     for(const auto pos : RandomMoves()) {
         if (board.GetCell(pos).has_value())
             continue;

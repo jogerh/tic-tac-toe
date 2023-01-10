@@ -38,7 +38,6 @@ void Board::ClearCell(size_t pos) {
 
 std::optional<Player> Board::GetCell(size_t pos) const
 {
-    assert (pos < m_grid.size());
     return m_grid[pos];
 }
 
